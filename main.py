@@ -89,7 +89,7 @@ def moves():
                 if available_moves_hashmap['SPL'] == True:
                     current_bid *= 2
                     available_moves_hashmap['SPL'] = False
-                    split1, split2 = [player_hand[0], Card('2', 'third')], [player_hand[-1], r_p.pick_random()]
+                    split1, split2 = [player_hand[0], r_p.pick_random()], [player_hand[-1], r_p.pick_random()]
                     player_hand1 = split1
                     player_hand2 = split2
                     current_hand = player_hand1
