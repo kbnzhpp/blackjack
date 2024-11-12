@@ -26,8 +26,8 @@ def start_game():
     global current_bid
     global dealer_card2_disclosed
     global current_hand
-    player_card1 = Card('2', '')
-    player_card2 = Card('2', '')
+    player_card1 = pick_random()
+    player_card2 = pick_random()
     player_hand = [player_card1, player_card2]
     dealer_card1 = pick_random()
     dealer_card2 = Card('Hidden card', '')
