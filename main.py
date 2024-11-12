@@ -119,9 +119,7 @@ def moves():
                     cards_show(current_hand)
                     moves()
                     bid2 = current_bid
-                    print(bid1, bid2)
                     current_bid = bid1 + bid2
-                    print(current_bid)
                     break
                 else: print('Cannot split there')
             case 'db':
