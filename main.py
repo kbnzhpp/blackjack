@@ -45,6 +45,7 @@ def start_game():
 
     check_available_moves(current_hand)
     moves()
+    print(count_values(current_hand))
     print(dealer_moves())
 
     player_value = count_values(current_hand)
@@ -64,17 +65,25 @@ def check_available_moves(hand):
     for key in available_moves_hashmap.keys():
         match key:
             case "SPL":
-                    if (hand[0].number == hand[-1].number):
-                        available_moves_hashmap[key] = True
+                if (hand[0].number == hand[-1].number) and len(hand) == 2:
+                    available_moves_hashmap[key] = True
+                else:
+                    available_moves_hashmap[key] = False
             case "DB":
                 if len(hand) == 2:
                     available_moves_hashmap[key] = True
+                else:
+                    available_moves_hashmap[key] = False
             case "HIT":
                 if hand:
                     available_moves_hashmap[key] = True
+                else:
+                    available_moves_hashmap[key] = False
             case "STAND":
                 if hand:
                     available_moves_hashmap[key] = True
+                else:
+                    available_moves_hashmap[key] = False
             case _:
                 continue
 
@@ -83,7 +92,7 @@ def moves():
     global current_hand
     global current_bid
     while True and count_values(current_hand) <= 21:
-        yes_or_no = input("What's your next move? Print SUR if you want to surrend, DB if double, SPL if split, INS if you want insurance, HIT if +card, STAND if you dont need new card\n")
+        yes_or_no = input("What's your next move? Print SUR if you want to surrend, DB if double, SPL if split, HIT if +card, STAND if you dont need new card\n")
         match yes_or_no:
             case "SPL":
                 if available_moves_hashmap['SPL'] == True:
@@ -107,7 +116,6 @@ def moves():
                     current_bid *= 2
                     current_hand.append(r_p.pick_random())
                     cards_show(current_hand)
-                    available_moves_hashmap['DB'] = False
                     break
                 else:
                     print('Double can be made only when you have 2 cards in hand')
@@ -122,8 +130,10 @@ def moves():
                 balance_player -= current_bid
                 print(f"You surrendered! You lose half your bet: {current_bid}. Current balance: {balance_player}")
                 start_game()
+                break
             case _:
                 print('Move is not allowed or not recognized')
+        check_available_moves(current_hand)
 
 #Cards show
 def cards_show(hand):
@@ -159,19 +169,22 @@ def dealer_moves():
         dealer_hand[1] = dealer_card2_disclosed
         x = count_values(dealer_hand)
         cards_show_dealer()
-        print(x)
         if x > 17:
             break
         dealer_hand.append(r_p.pick_random())
     return x
 
+
 def do_bid():
-    try:
-        bid = int(input('How much would you like to bet?\n'))
-    except ValueError:
-        print('Do bid in number')
-        bid = int(input('How much would you like to bet?\n'))
-    return bid
+    while True:
+        try:
+            bid = float(input('How much would you like to bet?\n'))
+            assert bid > 0 
+            return bid
+        except ValueError:
+            print('Please enter a number.')
+        except AssertionError:
+            print('Bid cannot be lower or equal to zero.')
 
 def print_result(bid, result):
     global balance_player
@@ -215,6 +228,6 @@ balance_player = 1000
 
 while balance_player > 0 :
     start_game()
-    if input('Wanna play another? Y or N\n') != 'Y':
+    inp = input('Wanna play another? Y or N\n')
+    if inp != 'Y':
         break
-
